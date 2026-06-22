@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Checkout - HimShakti</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed-variant": "#005236",
+                        "on-surface": "#131b2e",
+                        "on-background": "#131b2e",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-fixed": "#002116",
+                        "tertiary-fixed": "#6ffbbe",
+                        "on-surface-variant": "#3f4944",
+                        "primary-fixed": "#a6f2d1",
+                        "inverse-on-surface": "#eef0ff",
+                        "inverse-primary": "#8bd6b6",
+                        "inverse-surface": "#283044",
+                        "surface-container-lowest": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "primary": "#004532",
+                        "on-tertiary-container": "#50e0a4",
+                        "tertiary-container": "#006041",
+                        "on-secondary-fixed-variant": "#474743",
+                        "surface-tint": "#1b6b51",
+                        "surface-container-low": "#f2f3ff",
+                        "on-secondary-fixed": "#1c1c19",
+                        "on-error": "#ffffff",
+                        "on-tertiary-fixed": "#002113",
+                        "on-error-container": "#93000a",
+                        "surface-container-high": "#e2e7ff",
+                        "surface-bright": "#faf8ff",
+                        "secondary": "#5f5e5b",
+                        "tertiary-fixed-dim": "#4edea3",
+                        "primary-container": "#065f46",
+                        "surface-dim": "#d2d9f4",
+                        "on-secondary": "#ffffff",
+                        "surface-container-highest": "#dae2fd",
+                        "on-secondary-container": "#656461",
+                        "outline-variant": "#bec9c2",
+                        "secondary-container": "#e5e2dd",
+                        "on-primary-container": "#8bd6b7",
+                        "surface-container": "#eaedff",
+                        "background": "#faf8ff",
+                        "surface": "#faf8ff",
+                        "primary-fixed-dim": "#8bd6b6",
+                        "tertiary": "#00462e",
+                        "secondary-fixed-dim": "#c8c6c2",
+                        "outline": "#6f7973",
+                        "secondary-fixed": "#e5e2dd",
+                        "error": "#ba1a1a",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#00513b",
+                        "surface-variant": "#dae2fd"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "base": "8px",
+                        "section-gap-mobile": "64px",
+                        "section-gap-desktop": "120px",
+                        "gutter": "24px"
+                    },
+                    "fontFamily": {
+                        "display-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-md": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "label-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "display-lg-mobile": ["36px", { "lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "label-md": ["14px", { "lineHeight": "1.2", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "display-lg": ["48px", { "lineHeight": "1.1", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+                        "body-md": ["16px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "label-sm": ["12px", { "lineHeight": "1.2", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "1.6", "fontWeight": "400" }],
+                        "headline-sm": ["24px", { "lineHeight": "1.3", "fontWeight": "700" }],
+                        "headline-md": ["30px", { "lineHeight": "1.2", "letterSpacing": "-0.01em", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #faf8ff; color: #131b2e; }
+        .diffuse-shadow { box-shadow: 0px 10px 30px rgba(15, 23, 42, 0.08); }
+        .input-focus-ring:focus { border-color: #004532; border-width: 2px; outline: none; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex flex-col">
+<!-- TopNavBar Suppressed: Checkout Flow is Transactional -->
+<header class="w-full bg-surface-container-lowest border-b border-surface-dim py-4 px-gutter flex justify-center items-center fixed top-0 z-50">
+<a class="text-headline-md font-headline-md font-extrabold text-primary tracking-tight" href="#">HimShakti</a>
+</header>
+<main class="flex-grow pt-[100px] pb-section-gap-desktop px-gutter max-w-container-max mx-auto w-full">
+<div class="mb-12 text-center md:text-left">
+<h1 class="text-display-lg font-display-lg text-on-surface mb-2">Checkout</h1>
+<p class="text-body-lg font-body-lg text-on-surface-variant">Complete your order securely.</p>
+</div>
+<div class="flex flex-col lg:flex-row gap-gutter relative items-start">
+<!-- Left Column: Forms -->
+<div class="w-full lg:w-7/12 flex flex-col gap-8">
+<!-- Contact Information -->
+<section class="bg-surface-container-lowest rounded-[24px] p-6 md:p-8 diffuse-shadow">
+<h2 class="text-headline-sm font-headline-sm text-on-surface mb-6 flex items-center gap-2">
+<span aria-hidden="true" class="material-symbols-outlined text-primary" data-icon="contact_mail">contact_mail</span>
+                        Contact Information
+                    </h2>
+<div class="space-y-4">
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1" for="email">Email Address</label>
+<input class="w-full border border-outline-variant rounded-lg p-3 text-body-md font-body-md bg-surface-container-lowest text-on-surface input-focus-ring transition-all" id="email" placeholder="you@example.com" type="email"/>
+</div>
+<div class="flex items-center gap-2 mt-2">
+<input class="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4" id="offers" type="checkbox"/>
+<label class="text-body-md font-body-md text-on-surface-variant" for="offers">Email me with news and offers</label>
+</div>
+</div>
+</section>
+<!-- Shipping Address -->
+<section class="bg-surface-container-lowest rounded-[24px] p-6 md:p-8 diffuse-shadow">
+<h2 class="text-headline-sm font-headline-sm text-on-surface mb-6 flex items-center gap-2">
+<span aria-hidden="true" class="material-symbols-outlined text-primary" data-icon="local_shipping">local_shipping</span>
+                        Shipping Address
+                    </h2>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<div class="md:col-span-2">
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1" for="country">Country/Region</label>
+<select class="w-full border border-outline-variant rounded-lg p-3 text-body-md font-body-md bg-surface-container-lowest text-on-surface input-focus-ring transition-all" id="country">
+<option>India</option>
+<option>United States</option>
+<option>United Kingdom</option>
+</select>
+</div>
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1" for="firstName">First Name</label>
+<input class="w-full border border-outline-variant rounded-lg p-3 text-body-md font-body-md bg-surface-container-lowest text-on-surface input-focus-ring transition-all" id="firstName" type="text"/>
+</div>
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1" for="lastName">Last Name</label>
+<input class="w-full border border-outline-variant rounded-lg p-3 text-body-md font-body-md bg-surface-container-lowest text-on-surface input-focus-ring transition-all" id="lastName" type="text"/>
+</div>
+<div class="md:col-span-2">
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1" for="address">Address</label>
+<input class="w-full border border-outline-variant rounded-lg p-3 text-body-md font-body-md bg-surface-container-lowest text-on-surface input-focus-ring transition-all" id="address" placeholder="House number and street name" type="text"/>
+</div>
+<div class="md:col-span-2">
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1" for="apartment">Apartment, suite, etc. (optional)</label>
+<input class="w-full border border-outline-variant rounded-lg p-3 text-body-md font-body-md bg-surface-container-lowest text-on-surface input-focus-ring transition-all" id="apartment" type="text"/>
+</div>
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1" for="city">City</label>
+<input class="w-full border border-outline-variant rounded-lg p-3 text-body-md font-body-md bg-surface-container-lowest text-on-surface input-focus-ring transition-all" id="city" type="text"/>
+</div>
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1" for="state">State</label>
+<select class="w-full border border-outline-variant rounded-lg p-3 text-body-md font-body-md bg-surface-container-lowest text-on-surface input-focus-ring transition-all" id="state">
+<option>Uttarakhand</option>
+<option>Delhi</option>
+<option>Maharashtra</option>
+</select>
+</div>
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1" for="pin">PIN Code</label>
+<input class="w-full border border-outline-variant rounded-lg p-3 text-body-md font-body-md bg-surface-container-lowest text-on-surface input-focus-ring transition-all" id="pin" type="text"/>
+</div>
+<div>
+<label class="block text-label-sm font-label-sm text-on-surface-variant mb-1" for="phone">Phone</label>
+<input class="w-full border border-outline-variant rounded-lg p-3 text-body-md font-body-md bg-surface-container-lowest text-on-surface input-focus-ring transition-all" id="phone" type="tel"/>
+</div>
+</div>
+</section>
+<!-- Payment Method -->
+<section class="bg-surface-container-lowest rounded-[24px] p-6 md:p-8 diffuse-shadow">
+<h2 class="text-headline-sm font-headline-sm text-on-surface mb-6 flex items-center gap-2">
+<span aria-hidden="true" class="material-symbols-outlined text-primary" data-icon="credit_card">credit_card</span>
+                        Payment
+                    </h2>
+<p class="text-body-md font-body-md text-on-surface-variant mb-4">All transactions are secure and encrypted.</p>
+<div class="border border-outline-variant rounded-xl overflow-hidden bg-surface-container-lowest">
+<!-- Credit Card Option -->
+<div class="p-4 border-b border-outline-variant bg-surface-container-low flex items-center justify-between cursor-pointer">
+<div class="flex items-center gap-3">
+<input checked="" class="text-primary focus:ring-primary h-4 w-4" id="pay_card" name="payment" type="radio"/>
+<label class="text-label-md font-label-md text-on-surface cursor-pointer" for="pay_card">Credit Card</label>
+</div>
+<div class="flex gap-1">
+<span aria-hidden="true" class="material-symbols-outlined text-outline" data-icon="credit_score">credit_score</span>
+</div>
+</div>
+<!-- Credit Card Form -->
+<div class="p-4 bg-surface-container-lowest grid grid-cols-2 gap-4">
+<div class="col-span-2">
+<label class="sr-only" for="cardNumber">Card Number</label>
+<div class="relative">
+<input class="w-full border border-outline-variant rounded-lg p-3 pl-10 text-body-md font-body-md bg-surface-container-lowest text-on-surface input-focus-ring transition-all" id="cardNumber" placeholder="Card number" type="text"/>
+<span aria-hidden="true" class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline-variant" data-icon="lock">lock</span>
+</div>
+</div>
+<div class="col-span-2 md:col-span-1">
+<label class="sr-only" for="expDate">Expiration Date</label>
+<input class="w-full border border-outline-variant rounded-lg p-3 text-body-md font-body-md bg-surface-container-lowest text-on-surface input-focus-ring transition-all" id="expDate" placeholder="Expiration date (MM / YY)" type="text"/>
+</div>
+<div class="col-span-2 md:col-span-1">
+<label class="sr-only" for="secCode">Security Code</label>
+<div class="relative">
+<input class="w-full border border-outline-variant rounded-lg p-3 text-body-md font-body-md bg-surface-container-lowest text-on-surface input-focus-ring transition-all" id="secCode" placeholder="Security code" type="text"/>
+<span aria-hidden="true" class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline-variant" data-icon="help">help</span>
+</div>
+</div>
+<div class="col-span-2">
+<label class="sr-only" for="nameOnCard">Name on Card</label>
+<input class="w-full border border-outline-variant rounded-lg p-3 text-body-md font-body-md bg-surface-container-lowest text-on-surface input-focus-ring transition-all" id="nameOnCard" placeholder="Name on card" type="text"/>
+</div>
+</div>
+<!-- UPI Option -->
+<div class="p-4 border-t border-outline-variant flex items-center gap-3 cursor-pointer hover:bg-surface-container-low transition-colors">
+<input class="text-primary focus:ring-primary h-4 w-4" id="pay_upi" name="payment" type="radio"/>
+<label class="text-label-md font-label-md text-on-surface cursor-pointer w-full" for="pay_upi">UPI / Wallets</label>
+</div>
+<!-- COD Option -->
+<div class="p-4 border-t border-outline-variant flex items-center gap-3 cursor-pointer hover:bg-surface-container-low transition-colors">
+<input class="text-primary focus:ring-primary h-4 w-4" id="pay_cod" name="payment" type="radio"/>
+<label class="text-label-md font-label-md text-on-surface cursor-pointer w-full" for="pay_cod">Cash on Delivery (COD)</label>
+</div>
+</div>
+</section>
+<!-- Action Button Mobile (Hidden on Desktop, shown below summary instead) -->
+<div class="lg:hidden mt-4">
+<button class="w-full bg-primary text-on-primary rounded-xl py-4 px-6 text-label-md font-label-md hover:diffuse-shadow hover:-translate-y-0.5 transition-all duration-300">
+                        Complete Purchase
+                    </button>
+</div>
+</div>
+<!-- Right Column: Order Summary Sticky -->
+<div class="w-full lg:w-5/12 lg:sticky lg:top-[120px]">
+<section class="bg-secondary-container rounded-[24px] p-6 md:p-8 diffuse-shadow h-auto">
+<h2 class="text-headline-sm font-headline-sm text-on-surface mb-6">Order Summary</h2>
+<!-- Cart Items -->
+<div class="space-y-6 mb-6 max-h-[409px] overflow-y-auto pr-2 custom-scrollbar">
+<!-- Item 1 -->
+<div class="flex items-center gap-4">
+<div class="relative w-20 h-20 flex-shrink-0 rounded-[16px] overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="A jar of premium organic Himalayan honey on a rustic wooden table with soft, natural light." src="../screenshots/03-checkout.png"/>
+<span class="absolute -top-2 -right-2 bg-primary text-on-primary text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center z-10">1</span>
+</div>
+<div class="flex-grow">
+<h3 class="text-label-md font-label-md text-on-surface">Organic Himalayan Honey</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant">500g</p>
+</div>
+<div class="text-right">
+<p class="text-label-md font-label-md text-on-surface">₹450</p>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="flex items-center gap-4">
+<div class="relative w-20 h-20 flex-shrink-0 rounded-[16px] overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="A beautifully packaged pouch of Barnyard Millet with a Himalayan mountain background." src="../screenshots/08-shop-all-products.png"/>
+<span class="absolute -top-2 -right-2 bg-primary text-on-primary text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center z-10">2</span>
+</div>
+<div class="flex-grow">
+<h3 class="text-label-md font-label-md text-on-surface">Barnyard Millet</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant">1kg</p>
+</div>
+<div class="text-right">
+<p class="text-label-md font-label-md text-on-surface">₹300</p>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="flex items-center gap-4">
+<div class="relative w-20 h-20 flex-shrink-0 rounded-[16px] overflow-hidden bg-surface-container-highest">
+<img class="w-full h-full object-cover" data-alt="A jar of authentic Himalayan mixed pickle with vibrant spices visible through the glass." src="../screenshots/05-login-signup.png"/>
+<span class="absolute -top-2 -right-2 bg-primary text-on-primary text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center z-10">1</span>
+</div>
+<div class="flex-grow">
+<h3 class="text-label-md font-label-md text-on-surface">Himalayan Mixed Pickle</h3>
+<p class="text-label-sm font-label-sm text-on-surface-variant">250g</p>
+</div>
+<div class="text-right">
+<p class="text-label-md font-label-md text-on-surface">₹180</p>
+</div>
+</div>
+</div>
+<!-- Discount Code -->
+<div class="flex gap-2 mb-6 pt-6 border-t border-outline-variant/30">
+<input class="flex-grow border border-outline-variant rounded-lg p-3 text-body-md font-body-md bg-surface-container-lowest text-on-surface input-focus-ring transition-all" placeholder="Discount code" type="text"/>
+<button class="bg-surface-container-high text-on-surface px-4 py-2 rounded-lg text-label-md font-label-md hover:bg-outline-variant/30 transition-colors">Apply</button>
+</div>
+<!-- Totals -->
+<div class="space-y-3 pt-6 border-t border-outline-variant/30 text-body-md font-body-md text-on-surface">
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Subtotal</span>
+<span class="font-semibold">₹930</span>
+</div>
+<div class="flex justify-between">
+<span class="text-on-surface-variant">Shipping</span>
+<span class="font-semibold">Free</span>
+</div>
+<div class="flex justify-between items-end pt-4">
+<span class="text-headline-sm font-headline-sm text-on-surface">Total</span>
+<div class="text-right">
+<span class="text-label-sm font-label-sm text-on-surface-variant mr-2">INR</span>
+<span class="text-headline-md font-headline-md text-primary">₹930</span>
+</div>
+</div>
+</div>
+<!-- Action Button Desktop -->
+<div class="hidden lg:block mt-8">
+<button class="w-full bg-primary text-on-primary rounded-[16px] py-4 px-6 text-label-md font-label-md hover:diffuse-shadow hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2">
+<span aria-hidden="true" class="material-symbols-outlined" data-icon="lock">lock</span>
+                            Complete Purchase
+                        </button>
+</div>
+</section>
+</div>
+</div>
+</main>
+<!-- Footer Suppressed: Checkout Flow is Transactional -->
+<style>
+        /* Custom scrollbar for cart items to maintain clean look */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #bec9c2;
+            border-radius: 20px;
+        }
+    </style>
+</body></html>
