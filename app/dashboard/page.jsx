@@ -34,13 +34,13 @@ export default function DashboardPage() {
               <div className="w-16 h-16 rounded-full bg-secondary-container overflow-hidden">
                 <PremiumImage
                   src="/img/my_account_farmers.png"
-                  alt="Rahul's profile picture"
+                  alt="Surya's profile picture"
                   icon="person"
                   className="w-full h-full object-cover"
                 />
               </div>
               <div>
-                <h2 className="text-sm font-bold text-on-surface">Namaste, Rahul</h2>
+                <h2 className="text-sm font-bold text-on-surface">Namaste, Surya</h2>
                 <p className="text-xs text-on-surface-variant">HimShakti Member</p>
               </div>
             </div>

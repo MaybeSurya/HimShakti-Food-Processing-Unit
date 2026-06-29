@@ -74,7 +74,7 @@ cd HimShakti-Food-Processing-Unit
    ```bash
    cp .env.example .env
    ```
-   *(Ensure it contains `PORT=5000`)*
+   *(Ensure it contains `PORT=5000` and `MONGO_URI`)*
 3. Install backend packages:
    ```bash
    npm install
@@ -84,6 +84,16 @@ cd HimShakti-Food-Processing-Unit
    npm run dev
    ```
    The backend will run on: `http://localhost:5000`
+
+### Database Setup (MongoDB)
+
+To run the backend locally, you must connect to a MongoDB database.
+1. Make sure you have a running MongoDB server locally (`mongodb://localhost:27017`) or use a remote MongoDB connection string (e.g. MongoDB Atlas).
+2. Open `/backend/.env` and update the `MONGO_URI` variable:
+   ```env
+   MONGO_URI=mongodb://localhost:27017/himshakti
+   ```
+3. When you run `npm run dev`, the server will establish a connection to MongoDB and automatically seed the database with the initial product set if it is empty.
 
 ### 3️⃣ Frontend Setup
 

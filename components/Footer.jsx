@@ -1,5 +1,7 @@
 "use client";
 
+// Made with love by maybesurya.dev
+
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -13,8 +15,11 @@ export default function Footer() {
 
   // Hooks must always be called before any conditional return (Rules of Hooks)
   const [currentYear, setCurrentYear] = useState(null);
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
     setCurrentYear(new Date().getFullYear());
+    setMounted(true);
   }, []);
 
   // Suppress footer on transactional/checkout pages as per Stitch guidelines
@@ -86,31 +91,32 @@ export default function Footer() {
         {/* Newsletter */}
         <div className="flex flex-col items-start gap-4">
           <h4 className="text-sm font-bold text-primary">Stay Connected</h4>
-          <div
-            className="w-full relative max-w-xs"
-            suppressHydrationWarning={true}
-          >
-            <input
-              type="email"
-              suppressHydrationWarning={true}
-              className="w-full bg-surface text-on-surface text-xs border border-outline-variant rounded-full px-4 py-2 pr-12 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
-              placeholder="Email address"
-            />
-            <button
-              suppressHydrationWarning={true}
-              className="absolute right-1 top-1/2 -translate-y-1/2 bg-primary text-on-primary w-8 h-8 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity"
-            >
-              <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
-            </button>
-          </div>
+          {mounted ? (
+            <div className="w-full relative max-w-xs">
+              <input
+                type="email"
+                className="w-full bg-surface text-on-surface text-xs border border-outline-variant rounded-full px-4 py-2 pr-12 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary"
+                placeholder="Email address"
+              />
+              <button
+                className="absolute right-1 top-1/2 -translate-y-1/2 bg-primary text-on-primary w-8 h-8 rounded-full flex items-center justify-center hover:opacity-80 transition-opacity"
+              >
+                <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              </button>
+            </div>
+          ) : (
+            <div className="w-full relative max-w-xs h-[38px] bg-surface border border-outline-variant rounded-full" />
+          )}
         </div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-outline-variant/20 flex flex-col md:flex-row justify-between items-center text-xs text-on-surface-variant">
-        <p suppressHydrationWarning={true}>&copy; {currentYear ?? new Date().getFullYear()} HimShakti Himalayan Foods. All rights reserved.</p>
+        <p suppressHydrationWarning={true}>
+          &copy; {currentYear ?? new Date().getFullYear()} HimShakti Himalayan Foods. All rights reserved.
+          <span className="block md:inline md:ml-4 text-outline font-medium">Made with ❤️ by maybesurya.dev</span>
+        </p>
       </div>
       </div>
     </footer>
   );
 }
-

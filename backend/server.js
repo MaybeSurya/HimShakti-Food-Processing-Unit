@@ -4,11 +4,17 @@
  *
  * REST API for the HimShakti food processing portal.
  * Runs on PORT 5000 by default (configurable via .env).
+ * Connected to MongoDB via Mongoose.
  */
 
 const express = require("express");
 const cors = require("cors");
+const mongoose = require("mongoose");
 require("dotenv").config();
+
+const connectDB = require("./config/db");
+const Product = require("./models/Product");
+const Order = require("./models/Order");
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -33,10 +39,10 @@ app.options("*", cors());
 app.use(express.json());
 
 // ─────────────────────────────────────────────
-//  In-Memory Mock Database
+//  Initial Product Seeding Data
 // ─────────────────────────────────────────────
 
-let products = [
+const initialProducts = [
   {
     id: "barnyard-millet",
     name: "Himalayan Barnyard Millet (Jhangora)",
@@ -191,11 +197,20 @@ let products = [
   },
 ];
 
-// ─────────────────────────────────────────────
-//  Helper
-// ─────────────────────────────────────────────
-
-const findProductById = (id) => products.find((p) => p.id === id);
+const seedProducts = async () => {
+  try {
+    const count = await Product.countDocuments();
+    if (count === 0) {
+      console.log("🌱 Database is empty. Seeding initial products to MongoDB...");
+      await Product.insertMany(initialProducts);
+      console.log("✅ Seeding completed successfully!");
+    } else {
+      console.log("📊 Products database already populated.");
+    }
+  } catch (error) {
+    console.error("❌ Error seeding initial products:", error);
+  }
+};
 
 // ─────────────────────────────────────────────
 //  Routes
@@ -206,169 +221,226 @@ app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
     message: "🌿 HimShakti D2C Backend is running!",
-    version: "1.0.0",
-  });
-});
-
-/**
- * GET /api/products
- * List all products.
- */
-app.get("/api/products", (req, res) => {
-  res.status(200).json({
-    success: true,
-    count: products.length,
-    data: products,
+    version: "1.1.0",
+    database: "MongoDB (Mongoose)"
   });
 });
 
 /**
  * GET /api/products/search?q=...
  * Search products by name or category.
- * MUST be placed before /:id route to avoid conflict.
+ * Placed BEFORE custom /:id route to avoid conflict.
  */
-app.get("/api/products/search", (req, res) => {
-  const query = req.query.q;
+app.get("/api/products/search", async (req, res) => {
+  try {
+    const query = req.query.q;
 
-  if (!query || query.trim() === "") {
-    return res.status(400).json({
+    if (!query || query.trim() === "") {
+      return res.status(400).json({
+        success: false,
+        message: "Search query parameter 'q' is required.",
+      });
+    }
+
+    const regex = new RegExp(query, "i");
+    const results = await Product.find({
+      $or: [
+        { name: regex },
+        { category: regex }
+      ]
+    });
+
+    res.status(200).json({
+      success: true,
+      count: results.length,
+      query,
+      data: results,
+    });
+  } catch (err) {
+    console.error("[Search Products Error]", err.message);
+    res.status(500).json({
       success: false,
-      message: "Search query parameter 'q' is required.",
+      message: "Internal Server Error while searching products.",
     });
   }
+});
 
-  const lowerQuery = query.toLowerCase();
-  const results = products.filter(
-    (p) =>
-      p.name.toLowerCase().includes(lowerQuery) ||
-      p.category.toLowerCase().includes(lowerQuery) ||
-      p.description.toLowerCase().includes(lowerQuery)
-  );
-
-  res.status(200).json({
-    success: true,
-    count: results.length,
-    query,
-    data: results,
-  });
+/**
+ * GET /api/products
+ * List all products.
+ */
+app.get("/api/products", async (req, res) => {
+  try {
+    const productsList = await Product.find({});
+    res.status(200).json({
+      success: true,
+      count: productsList.length,
+      data: productsList,
+    });
+  } catch (err) {
+    console.error("[Get Products Error]", err.message);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error while fetching products.",
+    });
+  }
 });
 
 /**
  * GET /api/products/:id
- * Get a single product by ID.
+ * Get a single product by ID (either Mongoose ObjectId or slug id).
  */
-app.get("/api/products/:id", (req, res) => {
-  const product = findProductById(req.params.id);
+app.get("/api/products/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    let product;
 
-  if (!product) {
-    return res.status(404).json({
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      product = await Product.findById(id);
+    } else {
+      product = await Product.findOne({ id });
+    }
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: `Product with id '${id}' not found.`,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: product,
+    });
+  } catch (err) {
+    console.error("[Get Product by ID Error]", err.message);
+    res.status(500).json({
       success: false,
-      message: `Product with id '${req.params.id}' not found.`,
+      message: "Internal Server Error while fetching product details.",
     });
   }
-
-  res.status(200).json({
-    success: true,
-    data: product,
-  });
 });
 
 /**
  * POST /api/products
  * Create a new product.
- * Required body fields: id, name, category, price, description, inStock
  */
-app.post("/api/products", (req, res) => {
-  const { id, name, category, price, description, inStock } = req.body;
+app.post("/api/products", async (req, res) => {
+  try {
+    const { name, category, price } = req.body;
 
-  // Validate required fields
-  if (!id || !name || !category || price === undefined || !description || inStock === undefined) {
-    return res.status(400).json({
+    // Basic validation
+    if (!name || !category || price === undefined) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing required fields: name, category, price.",
+      });
+    }
+
+    const newProduct = await Product.create(req.body);
+
+    res.status(201).json({
+      success: true,
+      message: "Product created successfully.",
+      data: newProduct,
+    });
+  } catch (err) {
+    console.error("[Create Product Error]", err.message);
+    if (err.name === "ValidationError") {
+      return res.status(400).json({
+        success: false,
+        message: err.message,
+      });
+    }
+    if (err.code === 11000) {
+      return res.status(400).json({
+        success: false,
+        message: "A product with this unique ID already exists.",
+      });
+    }
+    res.status(500).json({
       success: false,
-      message: "Missing required fields: id, name, category, price, description, inStock.",
+      message: "Internal Server Error while creating product.",
     });
   }
-
-  // Check for duplicate ID
-  if (findProductById(id)) {
-    return res.status(400).json({
-      success: false,
-      message: `A product with id '${id}' already exists.`,
-    });
-  }
-
-  const newProduct = {
-    id,
-    name,
-    category,
-    price: Number(price),
-    description,
-    inStock: Boolean(inStock),
-    unit: req.body.unit || "500g",
-    badge: req.body.badge || null,
-    location: req.body.location || "Uttarakhand",
-    organic: req.body.organic || false,
-    pesticideFree: req.body.pesticideFree || false,
-    image: req.body.image || null,
-    icon: req.body.icon || "eco",
-  };
-
-  products.push(newProduct);
-
-  res.status(201).json({
-    success: true,
-    message: "Product created successfully.",
-    data: newProduct,
-  });
 });
 
 /**
  * PUT /api/products/:id
  * Update an existing product.
  */
-app.put("/api/products/:id", (req, res) => {
-  const index = products.findIndex((p) => p.id === req.params.id);
+app.put("/api/products/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    let product;
 
-  if (index === -1) {
-    return res.status(404).json({
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      product = await Product.findByIdAndUpdate(id, req.body, { new: true, runValidators: true });
+    } else {
+      product = await Product.findOneAndUpdate({ id }, req.body, { new: true, runValidators: true });
+    }
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: `Product with id '${id}' not found.`,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product updated successfully.",
+      data: product,
+    });
+  } catch (err) {
+    console.error("[Update Product Error]", err.message);
+    if (err.name === "ValidationError") {
+      return res.status(400).json({
+        success: false,
+        message: err.message,
+      });
+    }
+    res.status(500).json({
       success: false,
-      message: `Product with id '${req.params.id}' not found.`,
+      message: "Internal Server Error while updating product.",
     });
   }
-
-  // Merge existing product with update payload (spread keeps un-touched fields)
-  const updatedProduct = {
-    ...products[index],
-    ...req.body,
-    id: products[index].id, // Protect ID from being changed
-  };
-
-  products[index] = updatedProduct;
-
-  res.status(200).json({
-    success: true,
-    message: "Product updated successfully.",
-    data: updatedProduct,
-  });
 });
 
 /**
  * DELETE /api/products/:id
  * Delete a product by ID.
  */
-app.delete("/api/products/:id", (req, res) => {
-  const index = products.findIndex((p) => p.id === req.params.id);
+app.delete("/api/products/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    let product;
 
-  if (index === -1) {
-    return res.status(404).json({
+    if (mongoose.Types.ObjectId.isValid(id)) {
+      product = await Product.findByIdAndDelete(id);
+    } else {
+      product = await Product.findOneAndDelete({ id });
+    }
+
+    if (!product) {
+      return res.status(404).json({
+        success: false,
+        message: `Product with id '${id}' not found.`,
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Product deleted successfully.",
+      data: product,
+    });
+  } catch (err) {
+    console.error("[Delete Product Error]", err.message);
+    res.status(500).json({
       success: false,
-      message: `Product with id '${req.params.id}' not found.`,
+      message: "Internal Server Error while deleting product.",
     });
   }
-
-  products.splice(index, 1);
-
-  res.status(204).send(); // 204 No Content — success, no body
 });
 
 // ─────────────────────────────────────────────
@@ -378,7 +450,7 @@ app.delete("/api/products/:id", (req, res) => {
 app.use((req, res) => {
   res.status(404).json({
     success: false,
-    message: `Route '${req.method} ${req.originalUrl}' not found.`,
+    message: "API Route not found.",
   });
 });
 
@@ -386,7 +458,6 @@ app.use((req, res) => {
 //  Global Error Handling Middleware
 // ─────────────────────────────────────────────
 
-// eslint-disable-next-line no-unused-vars
 app.use((err, req, res, next) => {
   console.error("[Error]", err.stack || err.message);
   res.status(err.status || 500).json({
@@ -399,20 +470,34 @@ app.use((err, req, res, next) => {
 //  Start Server
 // ─────────────────────────────────────────────
 
-const server = app.listen(PORT, () => {
-  console.log(`\n🌿 HimShakti Backend running at http://localhost:${PORT}`);
-  console.log(`📦 Products API    → http://localhost:${PORT}/api/products`);
-  console.log(`🔍 Search API      → http://localhost:${PORT}/api/products/search?q=millet`);
-  console.log(`\nPress Ctrl+C to stop.\n`);
-});
+const startServer = async () => {
+  try {
+    // Connect to database
+    await connectDB();
 
-server.on("error", (err) => {
-  if (err.code === "EADDRINUSE") {
-    console.error(`\n❌ Port ${PORT} is already in use.`);
-    console.error(`   Kill the process using it or change PORT in .env\n`);
-  } else {
-    console.error("[Server Error]", err);
+    // Seed mock data if DB is empty
+    await seedProducts();
+
+    const server = app.listen(PORT, () => {
+      console.log(`\n🌿 HimShakti Backend running at http://localhost:${PORT}`);
+      console.log(`📦 Products API    → http://localhost:${PORT}/api/products`);
+      console.log(`🔍 Search API      → http://localhost:${PORT}/api/products/search?q=millet`);
+      console.log(`\nPress Ctrl+C to stop.\n`);
+    });
+
+    server.on("error", (err) => {
+      if (err.code === "EADDRINUSE") {
+        console.error(`\n❌ Port ${PORT} is already in use.`);
+        console.error(`   Kill the process using it or change PORT in .env\n`);
+      } else {
+        console.error("[Server Error]", err);
+      }
+      process.exit(1);
+    });
+  } catch (err) {
+    console.error(`❌ Failed to start server: ${err.message}`);
+    process.exit(1);
   }
-  process.exit(1);
-});
+};
 
+startServer();
