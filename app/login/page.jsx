@@ -154,7 +154,7 @@ export default function LoginPage() {
           <img
             className="w-full h-full object-cover"
             alt="Scenic Himalayan range at dawn"
-            src="/screenshots/05-login-signup.png"
+            src="/img/himalayan_dawn.png"
           />
         </div>
       </main>

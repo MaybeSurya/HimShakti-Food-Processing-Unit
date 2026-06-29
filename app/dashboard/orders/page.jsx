@@ -120,7 +120,7 @@ export default function OrderHistoryPage() {
                 <div className="flex -space-x-4 overflow-hidden">
                   <div className="w-16 h-16 rounded-lg border-2 border-surface bg-white overflow-hidden flex-shrink-0">
                     <PremiumImage
-                      src="/screenshots/03-checkout.png"
+                      src="/img/buransh_squash.png"
                       alt="Organic Himalayan Pink Salt"
                       icon="eco"
                       className="w-full h-full object-cover"
@@ -128,7 +128,7 @@ export default function OrderHistoryPage() {
                   </div>
                   <div className="w-16 h-16 rounded-lg border-2 border-surface bg-white overflow-hidden flex-shrink-0">
                     <PremiumImage
-                      src="/screenshots/08-shop-all-products.png"
+                      src="/img/himalayan_pantry_goods.png"
                       alt="Organic Himalayan Honey"
                       icon="eco"
                       className="w-full h-full object-cover"
@@ -183,7 +183,7 @@ export default function OrderHistoryPage() {
                 <div className="flex -space-x-4 overflow-hidden">
                   <div className="w-16 h-16 rounded-lg border-2 border-surface bg-white overflow-hidden flex-shrink-0">
                     <PremiumImage
-                      src="/screenshots/05-login-signup.png"
+                      src="/img/himalayan_dawn.png"
                       alt="Artisan vegetable pickle"
                       icon="soup_kitchen"
                       className="w-full h-full object-cover"
@@ -235,7 +235,7 @@ export default function OrderHistoryPage() {
                 <div className="flex -space-x-4 overflow-hidden">
                   <div className="w-16 h-16 rounded-lg border-2 border-surface bg-white overflow-hidden flex-shrink-0">
                     <PremiumImage
-                      src="/screenshots/01-ai-recipe-generator.png"
+                      src="/img/wild_linga_pickle.png"
                       alt="Organic Himalayan Grains bag"
                       icon="grain"
                       className="w-full h-full object-cover"
@@ -243,7 +243,7 @@ export default function OrderHistoryPage() {
                   </div>
                   <div className="w-16 h-16 rounded-lg border-2 border-surface bg-white overflow-hidden flex-shrink-0">
                     <PremiumImage
-                      src="/screenshots/03-checkout.png"
+                      src="/img/finger_millet_grains.png"
                       alt="Chilled juice bottle"
                       icon="local_bar"
                       className="w-full h-full object-cover"

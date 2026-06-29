@@ -13,7 +13,7 @@ const FEATURED_PRODUCTS = [
     price: "₹180",
     unit: "500g",
     badge: "Organic",
-    image: "/screenshots/07-product-details.png",
+    image: "/img/barnyard_millet.png",
     icon: "eco",
   },
   {
@@ -23,7 +23,7 @@ const FEATURED_PRODUCTS = [
     price: "₹250",
     unit: "250g",
     badge: "Traditional",
-    image: "/screenshots/01-ai-recipe-generator.png",
+    image: "/img/wild_linga_pickle.png",
     icon: "soup_kitchen",
   },
   {
@@ -33,7 +33,7 @@ const FEATURED_PRODUCTS = [
     price: "₹320",
     unit: "750ml",
     badge: "Wild Harvest",
-    image: "/screenshots/03-checkout.png",
+    image: "/img/buransh_squash.png",
     icon: "local_bar",
   },
 ];
@@ -194,7 +194,7 @@ export default function Home() {
             <div className="lg:col-span-5 relative">
               <div className="relative w-full aspect-[4/3] rounded-[24px] overflow-hidden bg-white shadow-sm border border-outline-variant/10">
                 <PremiumImage
-                  src="/screenshots/01-ai-recipe-generator.png"
+                  src="/img/himalayan_pantry_goods.png"
                   alt="AI Recipe Generator Interface"
                   icon="auto_awesome"
                   className="w-full h-full object-cover"

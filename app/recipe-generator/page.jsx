@@ -11,7 +11,7 @@ const MOCK_RECIPES = [
     description: "A hearty, warming dish utilizing Barnyard Millet infused with the bold, tangy notes of HimShakti Garlic Pickle. Perfect for a quick, nourishing meal.",
     time: "25 mins",
     difficulty: "Easy",
-    image: "/screenshots/01-ai-recipe-generator.png",
+    image: "/img/barnyard_millet.png",
     icon: "rice_bowl",
     ingredients: ["Barnyard Millet", "HimShakti Garlic Pickle", "Onions", "Olive oil", "Coriander"],
     instructions: [
@@ -27,7 +27,7 @@ const MOCK_RECIPES = [
     description: "Roasted seasonal vegetables tossed with olive oil and a hint of pickle zest, served over a bed of fluffy millet. A clean, balanced dinner option.",
     time: "40 mins",
     difficulty: "Medium",
-    image: "/screenshots/03-checkout.png",
+    image: "/img/finger_millet_grains.png",
     icon: "restaurant",
     ingredients: ["Millet Grains", "Seasonal Veggies (Carrots, Broccoli)", "HimShakti Spices", "Olive oil"],
     instructions: [
@@ -74,7 +74,7 @@ export default function RecipeGeneratorPage() {
           description: "A refreshing cooler combining the floral notes of HimShakti Buransh Squash with fresh mint and a splash of lime.",
           time: "5 mins",
           difficulty: "Easy",
-          image: "/screenshots/03-checkout.png",
+          image: "/img/buransh_squash.png",
           icon: "local_bar",
           ingredients: ["HimShakti Buransh Squash", "Chilled water or Soda", "Lime juice", "Mint leaves"],
           instructions: [

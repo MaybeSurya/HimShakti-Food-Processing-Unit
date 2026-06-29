@@ -33,7 +33,7 @@ export default function DashboardPage() {
             <div className="flex items-center space-x-4 mb-8">
               <div className="w-16 h-16 rounded-full bg-secondary-container overflow-hidden">
                 <PremiumImage
-                  src="/screenshots/02-my-account.png"
+                  src="/img/my_account_farmers.png"
                   alt="Rahul's profile picture"
                   icon="person"
                   className="w-full h-full object-cover"
@@ -146,7 +146,7 @@ export default function DashboardPage() {
                 <div className="flex items-center space-x-6 mb-4 md:mb-0">
                   <div className="w-16 h-16 rounded-lg bg-surface-container-low overflow-hidden flex-shrink-0">
                     <PremiumImage
-                      src="/screenshots/06-order-history.png"
+                      src="/img/himalayan_pantry_goods.png"
                       alt="Order package"
                       icon="inventory"
                       className="w-full h-full object-cover"
@@ -175,7 +175,7 @@ export default function DashboardPage() {
                 <div className="flex items-center space-x-6 mb-4 md:mb-0">
                   <div className="w-16 h-16 rounded-lg bg-surface-container-low overflow-hidden flex-shrink-0">
                     <PremiumImage
-                      src="/screenshots/07-product-details.png"
+                      src="/img/barnyard_millet.png"
                       alt="Artisan pickle jar"
                       icon="soup_kitchen"
                       className="w-full h-full object-cover"

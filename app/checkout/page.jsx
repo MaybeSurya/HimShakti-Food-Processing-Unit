@@ -14,7 +14,7 @@ const INITIAL_CART = [
     price: 450,
     qty: 1,
     unit: "500g",
-    image: "/screenshots/03-checkout.png",
+    image: "/img/buransh_squash.png",
     icon: "eco",
   },
   {
@@ -23,7 +23,7 @@ const INITIAL_CART = [
     price: 150, // ₹150 x 2 = ₹300 total
     qty: 2,
     unit: "1kg",
-    image: "/screenshots/08-shop-all-products.png",
+    image: "/img/barnyard_millet.png",
     icon: "eco",
   },
   {
@@ -32,7 +32,7 @@ const INITIAL_CART = [
     price: 180,
     qty: 1,
     unit: "250g",
-    image: "/screenshots/05-login-signup.png",
+    image: "/img/wild_linga_pickle.png",
     icon: "soup_kitchen",
   },
 ];

@@ -35,7 +35,7 @@ export default function AboutPage() {
               <img
                 className="w-full h-full object-cover"
                 alt="A beautiful valley in Uttarakhand with terraced fields"
-                src="/screenshots/04-our-story.png"
+                src="/img/our_story_terraces.png"
               />
               <div className="absolute inset-0 bg-primary/5 mix-blend-overlay"></div>
             </div>
@@ -72,7 +72,7 @@ export default function AboutPage() {
               <img
                 className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 transition-all duration-500"
                 alt="Coins and manual exchange"
-                src="/screenshots/01-ai-recipe-generator.png"
+                src="/img/himalayan_pantry_goods.png"
               />
             </div>
           </div>
@@ -95,7 +95,7 @@ export default function AboutPage() {
               <img
                 className="w-full h-full object-cover"
                 alt="A proud Uttarakhand farmer"
-                src="/screenshots/02-my-account.png"
+                src="/img/my_account_farmers.png"
               />
             </div>
           </div>

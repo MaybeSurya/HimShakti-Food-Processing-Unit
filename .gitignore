@@ -44,3 +44,10 @@ next-env.d.ts
 stitch-screens
 .AGENTS.md
 .CLAUDE.md
+
+# backend
+/backend/node_modules
+/backend/.env
+
+copy_images.js
+copy_images.py

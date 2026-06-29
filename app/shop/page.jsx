@@ -1,78 +1,26 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import toast from "react-hot-toast";
 import PremiumImage from "@/components/ui/PremiumImage";
+import Loader from "@/components/ui/Loader";
+import { showToast } from "@/components/ui/Toast";
 
-// Product catalog
-const INITIAL_PRODUCTS = [
-  {
-    id: "barnyard-millet",
-    title: "Himalayan Barnyard Millet",
-    category: "millets",
-    categoryLabel: "Millets & Grains",
-    price: 180,
-    unit: "500g",
-    badge: "Organic",
-    location: "Uttarakhand",
-    image: "/screenshots/07-product-details.png",
-    icon: "eco",
-    organic: true,
-    pesticideFree: true,
-  },
-  {
-    id: "wild-linga-pickle",
-    title: "Wild Linga Pickle",
-    category: "pickles",
-    categoryLabel: "Traditional Pickles",
-    price: 250,
-    unit: "250g",
-    badge: "Traditional",
-    location: "Uttarakhand",
-    image: "/screenshots/01-ai-recipe-generator.png",
-    icon: "soup_kitchen",
-    organic: false,
-    pesticideFree: true,
-  },
-  {
-    id: "buransh-squash",
-    title: "Buransh Squash",
-    category: "juices",
-    categoryLabel: "Organic Juices",
-    price: 320,
-    unit: "750ml",
-    badge: "Wild Harvest",
-    location: "Uttarakhand",
-    image: "/screenshots/03-checkout.png",
-    icon: "local_bar",
-    organic: true,
-    pesticideFree: true,
-  },
-  {
-    id: "finger-millet",
-    title: "Himalayan Finger Millet",
-    category: "millets",
-    categoryLabel: "Millets & Grains",
-    price: 160,
-    unit: "500g",
-    badge: "Organic",
-    location: "Uttarakhand",
-    image: "/screenshots/04-our-story.png",
-    icon: "grain",
-    organic: true,
-    pesticideFree: true,
-  },
-];
+const API_URL = "http://localhost:5000/api/products";
 
 export default function ShopPage() {
+  // ─── Remote data state ──────────────────────────────
+  const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // ─── Filter / sort state ─────────────────────────────
   const [selectedCategories, setSelectedCategories] = useState({
     all: true,
     millets: false,
     pickles: false,
     juices: false,
   });
-
   const [priceRange, setPriceRange] = useState(1000);
   const [certifications, setCertifications] = useState({
     organic: false,
@@ -80,6 +28,32 @@ export default function ShopPage() {
   });
   const [sortBy, setSortBy] = useState("Recommended");
 
+  // ─── Fetch products from Express backend ─────────────
+  useEffect(() => {
+    const fetchProducts = async () => {
+      setLoading(true);
+      try {
+        const res = await fetch(API_URL);
+        if (!res.ok) {
+          throw new Error(`Server responded with status ${res.status}`);
+        }
+        const json = await res.json();
+        setAllProducts(json.data || []);
+      } catch (err) {
+        console.error("[ShopPage] Failed to fetch products:", err);
+        showToast(
+          "Could not load products. Please ensure the backend server is running on port 5000.",
+          "error"
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
+
+  // ─── Handlers ────────────────────────────────────────
   const handleCategoryChange = (key) => {
     if (key === "all") {
       setSelectedCategories({
@@ -91,7 +65,6 @@ export default function ShopPage() {
     } else {
       setSelectedCategories((prev) => {
         const next = { ...prev, all: false, [key]: !prev[key] };
-        // If all sub-categories are false, reset to "all"
         const anySelected = next.millets || next.pickles || next.juices;
         if (!anySelected) {
           return { all: true, millets: false, pickles: false, juices: false };
@@ -106,12 +79,12 @@ export default function ShopPage() {
   };
 
   const handleAddToCart = (product) => {
-    toast.success(`Added ${product.title} to your basket!`);
+    toast.success(`Added ${product.name || product.title} to your basket!`);
   };
 
-  // Filtered and sorted products
+  // ─── Filtered + Sorted products ──────────────────────
   const processedProducts = useMemo(() => {
-    let result = [...INITIAL_PRODUCTS];
+    let result = [...allProducts];
 
     // Category Filter
     if (!selectedCategories.all) {
@@ -135,13 +108,13 @@ export default function ShopPage() {
     } else if (sortBy === "Price: High to Low") {
       result.sort((a, b) => b.price - a.price);
     } else if (sortBy === "Newest Arrivals") {
-      // Mock newest by alphabetical
-      result.sort((a, b) => a.title.localeCompare(b.title));
+      result.sort((a, b) => (a.name || a.title).localeCompare(b.name || b.title));
     }
 
     return result;
-  }, [selectedCategories, priceRange, certifications, sortBy]);
+  }, [allProducts, selectedCategories, priceRange, certifications, sortBy]);
 
+  // ─── Render ───────────────────────────────────────────
   return (
     <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 pt-32 grid grid-cols-1 md:grid-cols-12 gap-8">
       {/* Header Section */}
@@ -298,7 +271,19 @@ export default function ShopPage() {
 
       {/* Product Grid */}
       <section className="md:col-span-9">
-        {processedProducts.length === 0 ? (
+
+        {/* ── Loading State ── */}
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-32 gap-6">
+            <Loader size="lg" />
+            <p className="text-on-surface-variant font-semibold text-sm animate-pulse">
+              Loading Himalayan products…
+            </p>
+          </div>
+        )}
+
+        {/* ── Empty State ── */}
+        {!loading && processedProducts.length === 0 && (
           <div className="text-center py-20 bg-[#FAF7F2] dark:bg-surface-container-low rounded-[24px] border border-dashed border-outline-variant/30">
             <span className="material-symbols-outlined text-5xl text-outline-variant mb-4">
               search_off
@@ -315,9 +300,12 @@ export default function ShopPage() {
               Reset Filters
             </button>
           </div>
-        ) : (
+        )}
+
+        {/* ── Product Cards ── */}
+        {!loading && processedProducts.length > 0 && (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {processedProducts.map((product, idx) => (
+            {processedProducts.map((product) => (
               <article
                 key={product.id}
                 className="bg-[#FAF7F2] dark:bg-surface-container-low rounded-[24px] p-4 flex flex-col group hover:diffuse-shadow transition-shadow duration-300 border border-outline-variant/5"
@@ -325,13 +313,20 @@ export default function ShopPage() {
                 <Link href={`/products/${product.id}`} className="relative w-full aspect-square mb-6 overflow-hidden rounded-[20px] bg-white block">
                   <PremiumImage
                     src={product.image}
-                    alt={product.title}
+                    alt={product.name || product.title}
                     icon={product.icon}
                     className="object-cover w-full h-full group-hover:scale-105 transition-transform duration-500 rounded-[20px]"
                   />
-                  <span className="absolute top-4 left-4 bg-surface text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
-                    {product.badge}
-                  </span>
+                  {product.badge && (
+                    <span className="absolute top-4 left-4 bg-surface text-primary px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
+                      {product.badge}
+                    </span>
+                  )}
+                  {!product.inStock && (
+                    <span className="absolute top-4 right-4 bg-error/80 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider shadow-sm">
+                      Out of Stock
+                    </span>
+                  )}
                 </Link>
                 <div className="flex flex-col flex-grow">
                   <span className="text-xs font-semibold text-on-surface-variant mb-1 flex items-center gap-1">
@@ -340,7 +335,7 @@ export default function ShopPage() {
                   </span>
                   <Link href={`/products/${product.id}`}>
                     <h2 className="text-lg font-bold text-on-surface hover:text-primary mb-2 font-sans line-clamp-1">
-                      {product.title}
+                      {product.name || product.title}
                     </h2>
                   </Link>
                   <p className="text-primary font-extrabold text-lg mb-6 mt-auto">
@@ -351,9 +346,11 @@ export default function ShopPage() {
                   </p>
                   <button
                     onClick={() => handleAddToCart(product)}
-                    className="w-full bg-surface text-primary border border-primary/20 rounded-xl py-3 text-sm font-semibold hover:bg-primary hover:text-on-primary transition-colors flex items-center justify-center gap-2 cursor-pointer"
+                    disabled={!product.inStock}
+                    className="w-full bg-surface text-primary border border-primary/20 rounded-xl py-3 text-sm font-semibold hover:bg-primary hover:text-on-primary transition-colors flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-surface disabled:hover:text-primary"
                   >
-                    <span className="material-symbols-outlined">add_shopping_cart</span> Add to Cart
+                    <span className="material-symbols-outlined">add_shopping_cart</span>
+                    {product.inStock ? "Add to Cart" : "Unavailable"}
                   </button>
                 </div>
               </article>
