@@ -128,10 +128,6 @@ The backend exposes a clean REST API to manage the product catalog.
 | `PUT` | `/api/products/:id` | Update an existing product's fields |
 | `DELETE` | `/api/products/:id` | Remove a product from the database |
 
-### Postman Collection
-An export of the API collection is available in the root folder:
-* **`W4_APICollection_SuryaPrakash.json`** - Import this into Postman or Insomnia to test endpoints.
-
 ---
 
 ## 📁 Project Structure
